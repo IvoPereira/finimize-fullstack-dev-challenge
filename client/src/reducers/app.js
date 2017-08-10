@@ -1,4 +1,5 @@
 import {
+  SET_CURRENCY,
   SET_INITIAL_SAVINGS_AMOUNT,
   SET_MONTHLY_DEPOSIT,
   SET_INTEREST_RATE,
@@ -7,6 +8,7 @@ import {
 } from '../actionTypes'
 
 const initialState = {
+  currency: 'GBP',
   initialSavingsAmount: 1500,
   monthlyDeposit: 2000,
   interestRate: 10,
@@ -33,6 +35,10 @@ const initialState = {
 
 const app = (state = initialState, action) => {
   switch (action.type) {
+    case SET_CURRENCY:
+      return Object.assign({}, state, {
+        currency: action.value
+      })
     case SET_INITIAL_SAVINGS_AMOUNT:
       return Object.assign({}, state, {
         initialSavingsAmount: action.value

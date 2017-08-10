@@ -36,7 +36,6 @@ app.get('/projection/monthly', function (req, res) {
     // and multiply the current saving by it
     switch (interestRatePaymentPeriod) {
       case 'monthly':
-        console.log('current savings value with rate: ' + currentSavingsValue * interestRatePercentage)
         currentSavingsValue += currentSavingsValue * interestRatePercentage
         break
       case 'quarterly':

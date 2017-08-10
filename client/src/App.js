@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 import {
+  fetchCurrencyValues,
   setInitialSavingsAmount,
   setMonthlyDeposit,
   setInterestRate,
@@ -25,6 +26,8 @@ class App extends Component {
 
   render() {
     let {
+      currency,
+      onCurrencyChanged,
       initialSavingsAmount,
       onInitialSavingsAmountChanged,
       monthlyDeposit,
@@ -51,28 +54,20 @@ class App extends Component {
       }
     ]
 
-    /*
-        let data = Object.assign({})
-
-        let increasing_value = 1000
-
-        for (let year=0; year < 50; year++) {
-          for (let month=0; month < 12; month++) {
-            increasing_value += increasing_value * (year * month)
-    console.log('year: ' + year + ' - month: ' + month)
-
-            data = {...data, month: month, amount: 1000}
-
-            console.log(data)
-          }
-        }
-
-        let data = {}
-        data = {...data, month:1,amount:2000}
-        data = {...data, month:2,amount:3000}
-        console.log(data)
-        */
-
+    const currencyOptions = [
+      {
+        value: 'GBP',
+        label: '£'
+      },
+      {
+        value: 'EUR',
+        label: '€'
+      },
+      {
+        value: 'USD',
+        label: '$'
+      }
+    ]
 
     return (
       <div className="App">
@@ -81,11 +76,14 @@ class App extends Component {
         </div>
 
         <div className="financial-inputs">
+          <p className="input-label">What is your currency?</p>
+          <SelectInput defaultValue={currency} options={currencyOptions} onChange={onCurrencyChanged} />
+
           <p className="input-label">How much have you saved?</p>
-          <CurrencyInput defaultValue={initialSavingsAmount} onChange={onInitialSavingsAmountChanged} />
+          <CurrencyInput currency={currency} defaultValue={initialSavingsAmount} value={initialSavingsAmount} onChange={onInitialSavingsAmountChanged} />
 
           <p className="input-label">How much will you save each month?</p>
-          <CurrencyInput defaultValue={monthlyDeposit} onChange={onMonthlyDepositChanged} />
+          <CurrencyInput currency={currency} defaultValue={monthlyDeposit} value={monthlyDeposit} onChange={onMonthlyDepositChanged} />
 
           <p className="input-label">How much interest will you earn per year?</p>
           <SliderInput defaultValue={interestRate} onChange={onInterestRateChanged} />
@@ -95,8 +93,6 @@ class App extends Component {
         </div>
 
 				<div className="financial-display">
-					{/*We have included some sample data here, you will need to replace this
-					with your own. Feel free to change the data structure if you wish.*/}
 					<DisplayGraph data={monthlyProjectionData}/>
 				</div>
       </div>
@@ -106,6 +102,7 @@ class App extends Component {
 
 const mapStateToProps = state => {
   return {
+    currency: state.app.currency,
     initialSavingsAmount: state.app.initialSavingsAmount,
     monthlyDeposit: state.app.monthlyDeposit,
     interestRate: state.app.interestRate,
@@ -120,6 +117,10 @@ const mapDispatchToProps = dispatch => {
 
   return {
     fireOnSettingsChanged,
+    onCurrencyChanged: value => {
+      dispatch(fetchCurrencyValues(value))
+      fireOnSettingsChanged()
+    },
     onInitialSavingsAmountChanged: value => {
       dispatch(setInitialSavingsAmount(value))
       fireOnSettingsChanged()
