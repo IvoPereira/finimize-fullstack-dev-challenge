@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import './CurrencyInput.css'
+import './SelectInput.css'
 
-export default class CurrencyInput extends Component {
+export default class SelectInput extends Component {
 	constructor(props) {
 		super(props)
 
@@ -28,22 +28,26 @@ export default class CurrencyInput extends Component {
 	}
 
 	render() {
-		const { defaultValue } = this.props
+		const { defaultValue, options } = this.props
 		const { value } = this.state
 
 		return (
-			<div className={`currency-input ${defaultValue !== undefined ? 'default-value' : ''}`}>
-				<span>£</span>
-				<input type="text"
-					value={value}
+			<div className={`select-input ${defaultValue !== undefined ? 'default-value' : ''}`}>
+				<select
 					onChange={this.handleChange.bind(this)}
-					onFocus={this.handleFocus.bind(this)}/>
+					onFocus={this.handleFocus.bind(this)}
+				>
+					{options.map(option => (
+						<option key={option.value} value={option.value} selected={value === option.value}>{option.label}</option>
+			    ))}
+				</select>
 			</div>
 		)
 	}
 }
 
-CurrencyInput.propTypes = {
+SelectInput.propTypes = {
 	defaultValue: PropTypes.number,
-	onChange: PropTypes.function
+	onChange: PropTypes.function,
+	options: PropTypes.array
 }

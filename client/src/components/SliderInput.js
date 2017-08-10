@@ -15,25 +15,32 @@ export default class SliderInput extends Component {
 	handleChange(e) {
 		const value = e.target.value
 		this.setState({value})
+
+		if (typeof this.props.onChange === 'function') {
+			this.props.onChange(value)
+		}
 	}
 
 	render() {
 		const { value } = this.state
 
 		return (
-			<div className="fmz-slider">
-				<p>{value}%</p>
-				<input type="range"
-					value={value}
-					min={0}
-					max={10}
-					step={0.25}
-					onChange={this.handleChange.bind(this)}/>
+			<div className="fmz-slider-container">
+				<div className="fmz-slider">
+					<p>{value}%</p>
+					<input type="range"
+						value={value}
+						min={0}
+						max={10}
+						step={0.25}
+						onChange={this.handleChange.bind(this)}/>
+				</div>
 			</div>
 		)
 	}
 }
 
 SliderInput.propTypes = {
-	defaultValue: PropTypes.number
+	defaultValue: PropTypes.number,
+	onChange: PropTypes.function
 }
