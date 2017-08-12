@@ -11,7 +11,7 @@
   },
   "scripts": {
     "start": "concurrently \"npm run server\" \"npm run client\"",
-    "server": "node server.js",
+    "server": "node server/index.js",
     "client": "node scripts/start-client.js",
     "install": "cd client && yarn install && cd .."
   },
