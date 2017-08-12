@@ -25,22 +25,22 @@ export function fetchCurrencyValues(newCurrency) {
     dispatch(setCurrency(newCurrency))
 
     const oldMonthlyDeposit = getState().app.monthlyDeposit,
-            oldInitialSavingsAmount = getState().app.initialSavingsAmount
+          oldInitialSavingsAmount = getState().app.initialSavingsAmount
 
-    fetch('https://api.fixer.io/latest?base=' + oldCurrency + '&symbols=' + newCurrency)
+    fetch('/currency/rate?base=' + oldCurrency + '&to=' + newCurrency + '&monthlyDeposit=' + oldMonthlyDeposit + '&initialSavingsAmount=' + oldInitialSavingsAmount)
       .then(response => response.json())
       .then(json => {
 
-        if ('rates' in json && newCurrency in json.rates) {
-          let newCurrencyRate = json.rates[newCurrency],
-                newMonthlyDeposit = parseFloat( (newCurrencyRate * oldMonthlyDeposit).toFixed(3) ),
-                newInitialSavingsAmount = parseFloat( (newCurrencyRate * oldInitialSavingsAmount).toFixed(3) )
+        if ('monthlyDeposit' in json && 'initialSavingsAmount' in json) {
+          let monthlyDeposit = parseFloat( json.monthlyDeposit.toFixed(3) ),
+              initialSavingsAmount = parseFloat( json.initialSavingsAmount.toFixed(3) )
 
-          dispatch(setMonthlyDeposit( newMonthlyDeposit ))
-          dispatch(setInitialSavingsAmount( newInitialSavingsAmount ))
+          dispatch(setMonthlyDeposit( monthlyDeposit ))
+          dispatch(setInitialSavingsAmount( initialSavingsAmount ))
+
         }
-
       })
+
   }
 }
 
@@ -70,7 +70,7 @@ export function fetchMonthlyProjectionData() {
       interestRatePaymentPeriod: currentState.interestRatePaymentPeriod
     })
 
-    fetch('projection/monthly?' + querystring)
+    fetch('/projection/monthly?' + querystring)
       .then(response => response.json())
       .then(json => {
         if (json.status === 'success') {

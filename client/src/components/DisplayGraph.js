@@ -10,7 +10,7 @@ export default class DisplayGraph extends Component {
 		const baseProps = {
   		width: 450,
   		height: 300,
-  		padding: 50,
+  		padding: 100,
   		colorScale: ["#48C8FF", "#00b2ff", "#038AD0", "#006C9B"]
 		};
 
@@ -40,7 +40,8 @@ export default class DisplayGraph extends Component {
 						fill: "transparent",
 						size: 0,
 						stroke: "transparent"
-					}
+					},
+					tickLabels: {fontSize: 10},
 				}
 			}, baseProps),
 			line: Object.assign({
@@ -58,7 +59,7 @@ export default class DisplayGraph extends Component {
 		return (
 			<div>
 				<VictoryChart animate={{duration: 100}} theme={theme}>
-					<VictoryLine {...{data}} y="amount"/>
+					<VictoryLine {...{data}} y="amount" x="month"/>
 				</VictoryChart>
 			</div>
 		);
