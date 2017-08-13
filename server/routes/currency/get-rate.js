@@ -1,5 +1,6 @@
 const router = require('express').Router(),
-      request = require('request')
+      request = require('request'),
+      Utils = require('./../../../common/utils')
 
 module.exports = function (req, res) {
 
@@ -7,6 +8,20 @@ module.exports = function (req, res) {
         newCurrency = req.query.to || null,
         oldInitialSavingsAmount = parseFloat(req.query.initialSavingsAmount) || null,
         oldMonthlyDeposit = parseFloat(req.query.monthlyDeposit) || null
+
+  const invalidFields = Utils.getInvalidFields([
+    'base',
+    'to',
+    'initialSavingsAmount',
+    'monthlyDeposit'
+  ], req.query)
+
+  if (invalidFields && invalidFields.length) {
+    return res.status(400).json({
+      'status': 'error',
+      'message': 'The fields "' + invalidFields.join('", "') + '" are not valid.'
+    })
+  }
 
   request('https://api.fixer.io/latest?base=' + baseCurrency + '&symbols=' + newCurrency, function (error, response, body) {
     if (!body) {

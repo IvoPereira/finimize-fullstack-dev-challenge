@@ -1,3 +1,5 @@
+const Utils = require('./../../../common/utils')
+
 module.exports = function (req, res) {
 
   const initialSavingsAmount = parseFloat(req.query.initialSavingsAmount) || null,
@@ -5,7 +7,19 @@ module.exports = function (req, res) {
         interestRate = parseFloat(req.query.interestRate) || null,
         interestRatePaymentPeriod = req.query.interestRatePaymentPeriod || null
 
-  // TODO: Handle the possibility of not receiving any of the values above
+  const invalidFields = Utils.getInvalidFields([
+    'initialSavingsAmount',
+    'monthlyDeposit',
+    'interestRate',
+    'interestRatePaymentPeriod'
+  ], req.query)
+
+  if (invalidFields && invalidFields.length) {
+    return res.status(400).json({
+      'status': 'error',
+      'message': 'The fields "' + invalidFields.join('", "') + '" are not valid.'
+    })
+  }
 
   switch (interestRatePaymentPeriod) {
     case 'monthly':
