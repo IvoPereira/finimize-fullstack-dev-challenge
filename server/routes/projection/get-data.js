@@ -38,7 +38,7 @@ module.exports = function (req, res) {
   const result = [],
         maxYears = 50,
         totalMonths = maxYears * monthsPerYear,
-        interestRatePercentage = 1 + interestRate / monthsPerYear
+        interestRatePercentage = 1 + (interestRate/100) / monthsPerYear
 
   let currentSavingsValue = initialSavingsAmount,
       indexMonth = 0
@@ -55,16 +55,16 @@ module.exports = function (req, res) {
       // and multiply the current saving by it
       switch (interestRatePaymentPeriod) {
         case 'monthly':
-          currentSavingsValue += interestRatePercentage
+          currentSavingsValue *= interestRatePercentage
           break
         case 'quarterly':
           if (month === 3 || month === 7 || month === 11) {
-            currentSavingsValue += interestRatePercentage
+            currentSavingsValue *= interestRatePercentage
           }
           break
         case 'anually':
           if (month === 11) {
-            currentSavingsValue += interestRatePercentage
+            currentSavingsValue *= interestRatePercentage
           }
           break
         default:
